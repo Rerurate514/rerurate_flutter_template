@@ -1,16 +1,16 @@
-name: Flutter CI
+name: Flutter Android Build
 on:
-  pull_request:
+  push:
     branches:
       - develop
 jobs:
-  build:
-    name: Flutter Analyze and Test
+  build_android:
+    name: Build & Deploy Android APK
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    
+
     - name: Setup Java
       uses: actions/setup-java@v4
       with:
@@ -22,13 +22,9 @@ jobs:
       with:
         channel: 'stable'
 
-    - name: Clean Flutter build
-      run: flutter clean
-
     - name: Install dependencies
       run: flutter pub get
 
-    # リモートリポジトリでGitHub Secretsから.envファイルを動的に作成
     - name: Create .env
       run: |
         echo "API_KEY=${{ secrets.API_KEY }}" >> .env
@@ -39,23 +35,11 @@ jobs:
     - name: Generate code with build_runner
       run: dart run build_runner build --delete-conflicting-outputs
 
-    - name: Generate language_gen with build_runner
+    - name: Generate localizations
       run: |
         flutter pub get
         flutter gen-l10n
         flutter pub get
-
-    - name: Run linter
-      run: flutter analyze
-
-    - name: Run tests with coverage
-      run: flutter test --verbose --coverage --coverage-path=~/coverage/lcov.info
-
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v5
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        files: ~/coverage/lcov.info
 
     - name: Decode keystore
       run: echo "${{ secrets.SIGNING_KEY }}" | base64 -d > android/app/key.jks
@@ -70,7 +54,7 @@ jobs:
     - name: Build APK (Android)
       run: flutter build apk --release
 
-    - name: "Deploy apk 🚀"
+    - name: Deploy APK 🚀
       uses: actions/upload-artifact@v4
       with:
         name: release-apk
