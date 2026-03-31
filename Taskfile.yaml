@@ -4,7 +4,7 @@ tasks:
   setup:
     desc: "SDKのインストールとパッケージ取得"
     cmds:
-      - fvm install
+      - fvm install 3.41.5
       - fvm flutter pub get
       - task: gen
 
@@ -12,6 +12,7 @@ tasks:
     desc: "FVM経由でbuild_runnerを実行"
     cmds:
       - fvm flutter pub run build_runner build --delete-conflicting-outputs
+      - fvm flutter gen-l10n
 
   watch:
     desc: "FVM経由でbuild_runnerを実行"
