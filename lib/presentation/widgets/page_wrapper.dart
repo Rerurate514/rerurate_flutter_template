@@ -21,6 +21,7 @@ class PageWrapper extends StatelessWidget {
       appBar: appBar,
       body: SafeArea(
         child: Padding(
+          key: const Key('page_wrapper_padding'),
           padding: padding,
           child: child,
         ),

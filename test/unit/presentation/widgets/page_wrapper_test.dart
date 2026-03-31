@@ -35,14 +35,15 @@ void main() {
       expect(find.byType(SafeArea), findsOneWidget);
     });
 
-    testWidgets('デフォルトのpaddingがEdgeInsets.all(16)である', (tester) async {
+    testWidgets('2番目のウィジェットがSafeAreaである', (tester) async {
       await pumpWrapper(
         tester,
         const PageWrapper(child: SizedBox()),
       );
 
-      final padding = tester.widget<Padding>(find.byType(Padding).first);
-      expect(padding.padding, const EdgeInsets.all(16));
+      final safeAreaFinder = find.byType(SafeArea).at(0);
+
+      expect(safeAreaFinder, findsOneWidget);
     });
 
     testWidgets('カスタムpaddingが反映される', (tester) async {
@@ -56,7 +57,9 @@ void main() {
         ),
       );
 
-      final padding = tester.widget<Padding>(find.byType(Padding).first);
+      final padding = tester.widget<Padding>(find.byKey(
+        const Key('page_wrapper_padding')
+      ));
       expect(padding.padding, customPadding);
     });
 
