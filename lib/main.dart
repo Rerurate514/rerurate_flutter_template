@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import './l10n/app_localizations.dart';
+import './core/theme/app_theme.dart';
 
 void main() {
   runApp(const MainApp());
@@ -11,12 +12,14 @@ class MainApp extends StatelessWidget {
 
     @override
   Widget build(BuildContext context) {
-    return const ProviderScope(
+    return ProviderScope(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: Text('PlaceHolder')
+        theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
+        home: const Text('PlaceHolder')
       ),
     );
   }
