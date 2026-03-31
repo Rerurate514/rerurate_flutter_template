@@ -1,0 +1,33 @@
+version: '3'
+
+tasks:
+  setup:
+    desc: "SDKのインストールとパッケージ取得"
+    cmds:
+      - fvm install 3.41.5
+      - fvm flutter pub get
+      - task: gen
+      - task: format
+
+  gen:
+    desc: "FVM経由でbuild_runnerを実行"
+    cmds:
+      - fvm flutter pub run build_runner build --delete-conflicting-outputs
+      - fvm flutter gen-l10n
+
+  watch:
+    desc: "FVM経由でbuild_runnerを実行"
+    cmds:
+      - fvm flutter pub run build_runner watch --delete-conflicting-outputs
+
+  clean:
+    cmds:
+      - fvm flutter clean
+      - fvm flutter pub get
+
+  format:
+    desc: "コードの整形と自動修正を適用します"
+    cmds:
+      - fvm dart format .
+      - fvm dart fix --apply
+      - fvm flutter analyze
